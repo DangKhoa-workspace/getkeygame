@@ -1,10 +1,10 @@
 from flask import Flask, redirect
 import requests
-
+import time
 app = Flask(__name__)
 
 # --- Hàm tiện ích rút gọn link ---
-def rut_gon_link(url_can_rut_gon, link_du_phong="", format_response="json"):
+def layma(url_can_rut_gon, link_du_phong="", format_response="json"):
     api_url = "https://api.layma.net/api/admin/shortlink/quicklink"
     params = {
         "tokenUser": "b8b60726e4ebf47ffe41df8a8d96c869",
@@ -39,7 +39,7 @@ def process_and_redirect(target_url):
         final_url = response.url
         
         # Rút gọn và chuyển hướng
-        layma_link = rut_gon_link(final_url)
+        layma_link = layma(final_url)
         
         if layma_link:
             return redirect(layma_link, code=302)
@@ -59,10 +59,31 @@ def get_key_pubg():
     url_goc = "https://keyauth.click/get/duyanh"
     return process_and_redirect(url_goc)
 
-@app.route('/api/lqm')
-def get_key_lqm():
+@app.route('/api/lqthuong')
+def get_key_lqthuong():
     # Gọi logic dùng chung với URL của Liên Quân Mobile (thay bằng link thực tế của bạn)
-    url_goc = "https://keyauth.click/get/link_lqm_cua_ban" 
-    return process_and_redirect(url_goc)
+    url_goc = "https://vip.vnhax.top/GETKEY/vbduonq&type=com.garena.game.kgvn" 
+    response = requests.get(url_goc, timeout=10)
+    
+    response.raise_for_status()
+    
+    url_key = response.text.strip()
+    url_layma= layma(url_key)
+    return redirect(url_layma, code=302)
+
+@app.route('/api/lqvip')
+def get_key_lqvip():
+    # Gọi logic dùng chung với URL của Liên Quân Mobile (thay bằng link thực tế của bạn)
+    url_goc = "https://vip.vnhax.top/GETKEY/vbduonq&type=com.garena.game.kgvn" 
+    response = requests.get(url_goc, timeout=10)
+    
+    response.raise_for_status()
+    
+    url_key = response.text.strip()
+    url_layma_1= layma(url_key)
+    url_layma_2= layma(url_layma_1)
+    return redirect(url_layma_2, code=302)
 
 # Bạn có thể tiếp tục thêm các @app.route('/api/...') khác tương tự tại đây.
+
+#chạy code ở localhost:5000
