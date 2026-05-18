@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/getkey/pubgred",
-      "destination": "/api/getkey/pubgred"
+      "source": "/api/(.*)",
+      "destination": "/api/index"
     }
   ]
 }
